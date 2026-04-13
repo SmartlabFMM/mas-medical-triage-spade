@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Lucas Fernandez",
+    "age": 28,
+    "gender": "M",
+    "symptoms": ["trauma crânien", "hémorragie", "perte de conscience"],
+    "pain_level": 10,
+    "is_conscious": false
+  },
+  {
+    "name": "Isabelle Marchand",
+    "age": 42,
+    "gender": "F",
+    "symptoms": ["fracture ouverte", "hémorragie"],
+    "pain_level": 9,
+    "is_conscious": true
+  },
+  {
+    "name": "Théo Petit",
+    "age": 4,
+    "gender": "M",
+    "symptoms": ["trauma crânien", "vomissements"],
+    "pain_level": 7,
+    "is_conscious": true
+  },
+  {
+    "name": "Nadia Belkacem",
+    "age": 35,
+    "gender": "F",
+    "symptoms": ["brûlure grave", "douleur thoracique"],
+    "pain_level": 8,
+    "is_conscious": true
+  },
+  {
+    "name": "Philippe Garnier",
+    "age": 55,
+    "gender": "M",
+    "symptoms": ["douleur musculaire", "nausée"],
+    "pain_level": 4,
+    "is_conscious": true
+  }
+]

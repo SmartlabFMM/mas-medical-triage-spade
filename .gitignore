@@ -1,0 +1,17 @@
+# Python cache and virtualenv
+__pycache__/
+.pytest_cache/
+.venv/
+.venv311/
+
+# Local runtime and secrets
+.env
+credentials/credentials.json
+logs/*.log
+
+# Generated local outputs
+*.out
+*_output.txt
+test_results*.txt
+pip_list*.txt
+interface/node_modules/

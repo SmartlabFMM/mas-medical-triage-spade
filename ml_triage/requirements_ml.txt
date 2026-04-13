@@ -1,0 +1,20 @@
+# ── Existant ─────────────────────────────────────────
+spade>=3.3
+pydantic>=2.0
+python-dotenv>=1.0
+loguru>=0.7
+pytest>=8.0
+pytest-asyncio>=0.23
+faker>=24.0
+flask==2.3.3
+flask-cors>=4.0
+gspread>=6.0
+google-auth>=2.0
+google-auth-oauthlib>=1.0
+
+# ── Nouveau : Machine Learning + SHAP ────────────────
+scikit-learn>=1.3.0
+numpy>=1.24.0
+pandas>=2.0.0
+joblib>=1.3.0
+shap>=0.44.0
