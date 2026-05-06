@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Jean-Pierre Moreau",
+    "age": 74,
+    "gender": "M",
+    "symptoms": ["avc", "perte de conscience", "difficulté respiratoire"],
+    "pain_level": 9,
+    "is_conscious": false
+  },
+  {
+    "name": "Fatima Ouali",
+    "age": 68,
+    "gender": "F",
+    "symptoms": ["avc", "convulsions"],
+    "pain_level": 8,
+    "is_conscious": false
+  },
+  {
+    "name": "Bernard Leroy",
+    "age": 81,
+    "gender": "M",
+    "symptoms": ["avc", "vomissements", "mal de tête"],
+    "pain_level": 7,
+    "is_conscious": true
+  },
+  {
+    "name": "Marie-Claire Dupont",
+    "age": 59,
+    "gender": "F",
+    "symptoms": ["mal de tête", "nausée", "vomissements"],
+    "pain_level": 5,
+    "is_conscious": true
+  },
+  {
+    "name": "Ahmed Benali",
+    "age": 46,
+    "gender": "M",
+    "symptoms": ["mal de tête", "douleur musculaire"],
+    "pain_level": 3,
+    "is_conscious": true
+  }
+]

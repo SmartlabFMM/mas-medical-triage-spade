@@ -1,0 +1,12 @@
+[
+  {"name": "P01", "age": 65, "gender": "M", "symptoms": ["arrêt cardiaque"], "pain_level": 10, "is_conscious": false},
+  {"name": "P02", "age": 45, "gender": "F", "symptoms": ["avc", "perte de conscience"], "pain_level": 9, "is_conscious": false},
+  {"name": "P03", "age": 30, "gender": "M", "symptoms": ["hémorragie", "fracture ouverte"], "pain_level": 8, "is_conscious": true},
+  {"name": "P04", "age": 22, "gender": "F", "symptoms": ["douleur thoracique"], "pain_level": 7, "is_conscious": true},
+  {"name": "P05", "age": 55, "gender": "M", "symptoms": ["difficulté respiratoire"], "pain_level": 6, "is_conscious": true},
+  {"name": "P06", "age": 78, "gender": "F", "symptoms": ["fièvre élevée", "déshydratation"], "pain_level": 5, "is_conscious": true},
+  {"name": "P07", "age": 12, "gender": "M", "symptoms": ["convulsions"], "pain_level": 8, "is_conscious": false},
+  {"name": "P08", "age": 40, "gender": "F", "symptoms": ["douleur abdominale", "vomissements"], "pain_level": 6, "is_conscious": true},
+  {"name": "P09", "age": 67, "gender": "M", "symptoms": ["trauma crânien"], "pain_level": 7, "is_conscious": true},
+  {"name": "P10", "age": 28, "gender": "F", "symptoms": ["mal de tête", "nausée"], "pain_level": 3, "is_conscious": true}
+]
