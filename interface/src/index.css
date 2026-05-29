@@ -68,19 +68,20 @@
 
 /* LIGHT MODE */
 :root {
-  --button-outline: rgba(0,0,0, .10);
-  --badge-outline: rgba(0,0,0, .05);
+  --button-outline: rgba(0, 0, 0, .10);
+  --badge-outline: rgba(0, 0, 0, .05);
 
   --opaque-button-border-intensity: -8;
-  --elevate-1: rgba(0,0,0, .03);
-  --elevate-2: rgba(0,0,0, .08);
+  --elevate-1: rgba(0, 0, 0, .03);
+  --elevate-2: rgba(0, 0, 0, .08);
 
   /* Medical Teal/Navy Palette */
-  --background: 210 40% 98%; /* Light grey/blue */
+  --background: 210 40% 98%;
+  /* Light grey/blue */
   --foreground: 222 47% 11%;
-  
+
   --border: 214 32% 91%;
-  
+
   --card: 0 0% 100%;
   --card-foreground: 222 47% 11%;
   --card-border: 214 32% 91%;
@@ -98,7 +99,8 @@
   --popover-foreground: 222 47% 11%;
   --popover-border: 214 32% 91%;
 
-  --primary: 173 80% 25%; /* Deep medical teal */
+  --primary: 173 80% 25%;
+  /* Deep medical teal */
   --primary-foreground: 0 0% 100%;
 
   --secondary: 210 40% 96%;
@@ -110,23 +112,26 @@
   --accent: 210 40% 96%;
   --accent-foreground: 222 47% 11%;
 
-  --destructive: 0 84% 60%; /* Red */
+  --destructive: 0 84% 60%;
+  /* Red */
   --destructive-foreground: 0 0% 100%;
 
   --input: 214 32% 91%;
   --ring: 173 80% 25%;
-  
+
   --chart-1: 173 80% 25%;
   --chart-2: 222 47% 11%;
   --chart-3: 0 84% 60%;
-  --chart-4: 38 92% 50%; /* Orange */
-  --chart-5: 48 96% 53%; /* Yellow */
+  --chart-4: 38 92% 50%;
+  /* Orange */
+  --chart-5: 48 96% 53%;
+  /* Yellow */
 
   --app-font-sans: 'Inter', sans-serif;
   --app-font-serif: Georgia, serif;
   --app-font-mono: Menlo, monospace;
   --radius: 0.5rem;
-  
+
   --shadow-2xs: 0px 2px 0px 0px hsl(202.8169 89.1213% 53.1373% / 0.00);
   --shadow-xs: 0px 2px 0px 0px hsl(202.8169 89.1213% 53.1373% / 0.00);
   --shadow-sm: 0px 2px 0px 0px hsl(202.8169 89.1213% 53.1373% / 0.00), 0px 1px 2px -1px hsl(202.8169 89.1213% 53.1373% / 0.00);
@@ -148,12 +153,12 @@
 }
 
 .dark {
-  --button-outline: rgba(255,255,255, .10);
-  --badge-outline: rgba(255,255,255, .05);
+  --button-outline: rgba(255, 255, 255, .10);
+  --badge-outline: rgba(255, 255, 255, .05);
 
   --opaque-button-border-intensity: 9;
-  --elevate-1: rgba(255,255,255, .04);
-  --elevate-2: rgba(255,255,255, .09);
+  --elevate-1: rgba(255, 255, 255, .04);
+  --elevate-2: rgba(255, 255, 255, .09);
 
   /* Deep Navy */
   --background: 222 47% 11%;
@@ -195,7 +200,7 @@
 
   --input: 217 33% 17%;
   --ring: 173 80% 35%;
-  
+
   --chart-1: 173 80% 35%;
   --chart-2: 210 40% 98%;
   --chart-3: 0 84% 60%;
@@ -226,13 +231,17 @@
   input[type="search"]::-webkit-search-cancel-button {
     @apply hidden;
   }
+
   [contenteditable][data-placeholder]:empty::before {
     content: attr(data-placeholder);
     color: hsl(var(--muted-foreground));
     pointer-events: none;
   }
+
   .no-default-hover-elevate {}
+
   .no-default-active-elevate {}
+
   .toggle-elevate::before,
   .toggle-elevate-2::before {
     content: "";
@@ -242,12 +251,15 @@
     border-radius: inherit;
     z-index: -1;
   }
+
   .toggle-elevate.toggle-elevated::before {
     background-color: var(--elevate-2);
   }
+
   .border.toggle-elevate::before {
     inset: -1px;
   }
+
   .hover-elevate:not(.no-default-hover-elevate),
   .active-elevate:not(.no-default-active-elevate),
   .hover-elevate-2:not(.no-default-hover-elevate),
@@ -255,6 +267,7 @@
     position: relative;
     z-index: 0;
   }
+
   .hover-elevate:not(.no-default-hover-elevate)::after,
   .active-elevate:not(.no-default-active-elevate)::after,
   .hover-elevate-2:not(.no-default-hover-elevate)::after,
@@ -266,14 +279,17 @@
     border-radius: inherit;
     z-index: 999;
   }
+
   .hover-elevate:hover:not(.no-default-hover-elevate)::after,
   .active-elevate:active:not(.no-default-active-elevate)::after {
     background-color: var(--elevate-1);
   }
+
   .hover-elevate-2:hover:not(.no-default-hover-elevate)::after,
   .active-elevate-2:active:not(.no-default-active-elevate)::after {
     background-color: var(--elevate-2);
   }
+
   .border.hover-elevate:not(.no-hover-interaction-elevate)::after,
   .border.active-elevate:not(.no-active-interaction-elevate)::after,
   .border.hover-elevate-2:not(.no-hover-interaction-elevate)::after,

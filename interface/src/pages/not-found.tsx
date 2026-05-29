@@ -9,14 +9,14 @@ export default function NotFound() {
         <div className="mx-auto w-16 h-16 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center mb-6">
           <ShieldAlert className="h-8 w-8 text-red-600 dark:text-red-500" />
         </div>
-        <h1 className="text-2xl font-bold tracking-tight text-foreground mb-2">404 - System Error</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-foreground mb-2">404 - Erreur Système</h1>
         <p className="text-muted-foreground mb-8">
-          The requested clinical module could not be located. Please verify the URL or return to the main triage terminal.
+          Le module clinique demandé n'a pas pu être trouvé. Veuillez vérifier l'URL ou retourner au terminal de triage principal.
         </p>
         <Link href="/">
           <Button className="w-full h-12 font-medium flex items-center justify-center gap-2">
             <Activity className="h-4 w-4" />
-            Return to Triage Terminal
+            Retour au Terminal de Triage
           </Button>
         </Link>
       </div>

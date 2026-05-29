@@ -18,6 +18,7 @@ logger.add(
     format="{time:YYYY-MM-DD HH:mm:ss} | {level:<8} | {name} | {message}",
     rotation="10 MB",
     retention="7 days",
+    encoding="utf-8",
 )
 logger.add(
     lambda msg: sys.stdout.write(str(msg)),

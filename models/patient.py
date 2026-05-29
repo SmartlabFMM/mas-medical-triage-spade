@@ -4,7 +4,7 @@ Structure Pydantic : validation automatique des champs.
 """
 from __future__ import annotations
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List, Dict, Any
 from pydantic import BaseModel, Field, field_validator
 
 
@@ -15,7 +15,8 @@ class Patient(BaseModel):
     name: str = Field(..., min_length=2, max_length=100, description="Nom complet du patient")
     age: int = Field(..., ge=0, le=150, description="Âge du patient en années")
     gender: str = Field(..., pattern="^(M|F|autre)$", description="Genre du patient")
-    symptoms: list[str] = Field(..., min_items=1, description="Liste des symptômes (minimum 1)")
+    symptoms: list[str] = Field(..., min_length=1, description="Liste des symptômes (minimum 1)")
+    symptoms_details: Optional[str] = Field(default="", description="Détails des symptômes (texte libre)")
     arrival_time: datetime = Field(default_factory=datetime.now, description="Heure d'arrivée")
     is_conscious: bool = Field(default=True, description="État de conscience")
     pain_level: int = Field(default=0, ge=0, le=10, description="Niveau de douleur (0-10)")

@@ -1,5 +1,5 @@
 """
-agents/clinical_agent.py — Agent Clinique SPADE + BDI + ML.
+agents/clinical_agent.py — Agent Clinique SPADE + BDI (Rule-based v2.0).
 Correction : RETURN_HOME remplacé par ActionType valide (surveiller).
 """
 from __future__ import annotations
@@ -20,20 +20,11 @@ from config import AGENTS_JID
 
 logger = logging.getLogger(__name__)
 
-# ── Import optionnel du modèle ML ─────────────────────────────────────────────
-try:
-    from core.triage_ai import get_triage_ai
-    ML_AVAILABLE = True
-    logger.info("TriageAI ML disponible")
-except ImportError:
-    ML_AVAILABLE = False
-    logger.info("TriageAI ML non disponible — mode règles métier")
-
 
 class ClinicalAgent(Agent):
     """
     Agent BDI d'évaluation clinique.
-    Utilise le modèle ML si disponible, sinon les règles métier.
+    Utilise le calculateur de gravité basé sur les règles v2.0.
     """
 
     class TriageBehaviour(CyclicBehaviour):
@@ -44,11 +35,19 @@ class ClinicalAgent(Agent):
                 return
 
             msg_type = get_msg_type(msg)
+            sender = str(msg.sender) if msg.sender else "unknown"
+            print(f"[DEBUG] ClinicalAgent received message from {sender}, type={msg_type}")
+            
             payload  = parse_body(msg)
             pid      = get_patient_id(msg)
 
             if msg_type == MessageType.SYMPTOM_REPORT:
-                patient = Patient(**payload["patient"])
+                patient_data = payload["patient"]
+                # Récupérer symptoms_details du payload (envoyé séparément par ConversationalAgent)
+                symptoms_details = payload.get("symptoms_details")
+                if symptoms_details:
+                    patient_data["symptoms_details"] = symptoms_details
+                patient = Patient(**patient_data)
                 await self._evaluate(patient, pid)
 
             elif msg_type == MessageType.REEVALUATE:
@@ -64,8 +63,42 @@ class ClinicalAgent(Agent):
         def _update_beliefs(self, patient: Patient,
                             constraints: ResourceState | None = None) -> None:
             self.agent.beliefs.update("patient", patient)
-            score = compute_score(patient.symptoms, patient.pain_level, patient.age)
+            # Nouveau calculateur v2.0 - utiliser les détails des symptômes si disponibles
+            detailed_symptoms = []
+            if patient.symptoms_details:
+                # Parser symptoms_details (JSON string ou liste)
+                try:
+                    import json
+                    symptoms_data = json.loads(patient.symptoms_details) if isinstance(patient.symptoms_details, str) else patient.symptoms_details
+                    if isinstance(symptoms_data, list):
+                        detailed_symptoms = [
+                            {
+                                'name': s.get('name', s.get('symptom', '')),
+                                'intensity': s.get('intensity', 2),
+                                'duration': s.get('duration', 'recente')
+                            }
+                            for s in symptoms_data
+                        ]
+                except:
+                    pass
+            
+            if not detailed_symptoms:
+                # Fallback avec valeurs par défaut
+                detailed_symptoms = [
+                    {'name': s, 'intensity': 2, 'duration': 'recente'}
+                    for s in patient.symptoms
+                ]
+            
+            result = compute_score(
+                symptoms=detailed_symptoms,
+                pain_level=patient.pain_level,
+                age=patient.age,
+                is_conscious=True
+            )
+            score = result['score']
             self.agent.beliefs.update("severity_score", score)
+            # Stocker aussi la classification complète
+            self.agent.beliefs.update("severity_result", result)
             if constraints:
                 self.agent.beliefs.update("resource_constraints", constraints)
 
@@ -79,27 +112,31 @@ class ClinicalAgent(Agent):
             c: ResourceState | None = self.agent.beliefs.get("resource_constraints")
             beds_ok = True if c is None else c.beds_available > 0
             
-            # Logique de décision améliorée basée sur le score
-            if score >= 70:  # Critique
-                hospitalize_utility = 0.9 if beds_ok else 0.2
-                watch_utility = 0.1
-                transfer_utility = 0.8 if not beds_ok else 0.3
-                hospitalize_rationale = f"Urgence critique (score {score:.1f}) - admission immédiate requise"
-            elif score >= 40:  # Sévère
-                hospitalize_utility = 0.7 if beds_ok else 0.3
-                watch_utility = 0.4
-                transfer_utility = 0.6 if not beds_ok else 0.2
-                hospitalize_rationale = f"État sévère (score {score:.1f}) - hospitalisation recommandée"
-            elif score >= 20:  # Modéré
-                hospitalize_utility = 0.4 if beds_ok else 0.1
-                watch_utility = 0.7
+            # Classification finale selon les règles demandées:
+            # 0-25: Léger → À surveiller (retour à domicile)
+            # 26-50: Modéré → Hospitalisation légère OBLIGATOIRE (généraliste)
+            # 51-75: Urgent → Hospitalisation obligatoire
+            # 76-100: Critique → Hospitalisation prioritaire
+            if score >= 76:  # Critique
+                hospitalize_utility = 0.95 if beds_ok else 0.3
+                watch_utility = 0.05
+                transfer_utility = 0.9 if not beds_ok else 0.2
+                hospitalize_rationale = f"URGENCE CRITIQUE (score {score:.1f}) - hospitalisation prioritaire immédiate"
+            elif score >= 51:  # Urgent
+                hospitalize_utility = 0.85 if beds_ok else 0.4
+                watch_utility = 0.15
+                transfer_utility = 0.7 if not beds_ok else 0.25
+                hospitalize_rationale = f"URGENT (score {score:.1f}) - hospitalisation obligatoire"
+            elif score >= 26:  # Modéré → Hospitalisation légère OBLIGATOIRE
+                hospitalize_utility = 0.75 if beds_ok else 0.5  # Supérieur à watch pour forcer l'hospitalisation
+                watch_utility = 0.25  # Réduit car hospitalisation obligatoire
                 transfer_utility = 0.3 if not beds_ok else 0.1
-                hospitalize_rationale = f"État modéré (score {score:.1f}) - observation prioritaire"
-            else:  # Léger
-                hospitalize_utility = 0.1 if beds_ok else 0.05
-                watch_utility = 0.8
+                hospitalize_rationale = f"Modéré (score {score:.1f}) - hospitalisation légère obligatoire"
+            else:  # Léger (0-25)
+                hospitalize_utility = 0.15 if beds_ok else 0.05
+                watch_utility = 0.85
                 transfer_utility = 0.1 if not beds_ok else 0.05
-                hospitalize_rationale = f"État léger (score {score:.1f}) - surveillance suffisante"
+                hospitalize_rationale = f"Léger (score {score:.1f}) - surveillance à domicile"
 
             options = [
                 ClinicalOption(
@@ -133,33 +170,11 @@ class ClinicalAgent(Agent):
 
             # Beliefs
             self._update_beliefs(patient)
-            rule_score = compute_score(patient.symptoms, patient.pain_level, patient.age)
-
-            # Calcul du score (ML ou règles métier)
-            ml_score   = None
-            ml_explain = []
-
-            if ML_AVAILABLE:
-                try:
-                    ai     = get_triage_ai()
-                    result = ai.predict(
-                        symptoms=patient.symptoms,
-                        pain_level=patient.pain_level,
-                        patient_id=pid,
-                    )
-                    ml_score   = result["severity_score"]
-                    ml_explain = result.get("explanation", [])
-                    self.agent.beliefs.update("severity_score", ml_score)
-                    log_agent_state("ClinicalAgent",
-                                    f"ML score={ml_score:.1f} ({severity_label(ml_score)})")
-                except Exception as e:
-                    log_agent_state("ClinicalAgent", f"ML erreur ({e}) — fallback règles")
-
-            score = ml_score if ml_score is not None else self.agent.beliefs.get("severity_score", 0.0)
-            # Hybrid guardrail for chat-extracted symptoms:
-            # avoid under-estimation when ML misses some free-text symptom semantics.
-            score = max(float(score), float(rule_score))
-            score = max(0.0, min(100.0, round(score, 1)))
+            # ── Calculateur basé sur les règles v2.0 ──────────
+            # Le score a été calculé dans _update_beliefs et stocké dans severity_score
+            score = self.agent.beliefs.get("severity_score") or 0.0
+            score = max(0.0, min(100.0, round(float(score), 1)))
+            log_agent_state("ClinicalAgent", f"Rule-based score={score:.1f} ({severity_label(score)})")
 
             # Desires → Intentions
             options = self._generate_options(ml_score=score)
@@ -169,7 +184,7 @@ class ClinicalAgent(Agent):
                             f"score={score:.1f} ({severity_label(score)}) "
                             f"→ intention={best.action.value}")
 
-            # Envoi au Meta-Agent
+            # Envoi au Meta-Agent (avec données patient pour assignation médecin)
             msg = build_message(
                 to=AGENTS_JID["meta"],
                 performative=Performative.PROPOSE,
@@ -180,8 +195,7 @@ class ClinicalAgent(Agent):
                     "options":        [o.model_dump() for o in options],
                     "best_option":    best.model_dump(),
                     "belief_revisions": self.agent.beliefs.revision_count(),
-                    "ml_explanation": ml_explain,
-                    "ml_used":        ML_AVAILABLE and ml_score is not None,
+                    "patient":        patient.model_dump(),  # Données patient pour routage
                 },
                 patient_id=pid,
                 thread=pid,

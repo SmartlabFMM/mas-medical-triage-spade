@@ -1,12 +1,12 @@
 """
-config.py — Configuration centrale (SPADE + Google Sheets).
+config.py — Configuration centrale (SPADE).
 """
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
-# ── XMPP / SPADE ─────────────────────────────────────────────────────────────
+# ── XMPP / SPADE ─────────────────────────────────────────────────────
 XMPP_SERVER: str = os.getenv("XMPP_SERVER", "localhost")
 
 # Security Settings
@@ -42,7 +42,7 @@ AGENTS_PWD = {
     "meta":           _get_agent_password("meta"),
 }
 
-# ── Hôpital ───────────────────────────────────────────────────────────────────
+# ── Hôpital ───────────────────────────────────────────────────────────
 HOSPITAL_NAME: str    = os.getenv("HOSPITAL_NAME", "Urgences_Demo")
 BEDS_TOTAL: int       = int(os.getenv("BEDS_TOTAL", 20))
 BEDS_AVAILABLE: int   = int(os.getenv("BEDS_AVAILABLE", 15))
@@ -55,16 +55,11 @@ SPECIALISTS: dict[str, int] = {
     "general":       int(os.getenv("SPECIALIST_GENERAL", 5)),
 }
 
-# ── Simulation ────────────────────────────────────────────────────────────────
+# ── Simulation ────────────────────────────────────────────────────────
 MAX_PATIENTS: int       = int(os.getenv("MAX_PATIENTS", 20))
 TRIAGE_TIMEOUT: float   = float(os.getenv("TRIAGE_TIMEOUT", 6))
 SIMULATION_SPEED: float = float(os.getenv("SIMULATION_SPEED", 1.0))
 
-# ── Logging ───────────────────────────────────────────────────────────────────
+# ── Logging ───────────────────────────────────────────────────────────
 LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")
 LOG_FILE: str  = os.getenv("LOG_FILE", "logs/triage.log")
-
-# ── Google Sheets ─────────────────────────────────────────────────────────────
-GOOGLE_CREDENTIALS_PATH: str  = os.getenv("GOOGLE_CREDENTIALS_PATH",
-                                           "credentials/credentials.json")
-GOOGLE_SPREADSHEET_NAME: str  = os.getenv("GOOGLE_SPREADSHEET_NAME", "MAS_Resources")
