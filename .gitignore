@@ -3,15 +3,48 @@ __pycache__/
 .pytest_cache/
 .venv/
 .venv311/
+venv/
+env/
+*.py[cod]
+*$py.class
 
 # Local runtime and secrets
 .env
 credentials/credentials.json
 logs/*.log
+mas_medical_triage/interface/.env
+mas_medical_triage/interface/.env.local
+
+# Node
+node_modules/
+mas_medical_triage/interface/node_modules/
+mas_medical_triage/interface/dist/
 
 # Generated local outputs
 *.out
 *_output.txt
 test_results*.txt
 pip_list*.txt
-interface/node_modules/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.cache
+nosetests.xml
+coverage.xml
+*.mo
+*.pot
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Project specific
+mas_medical_triage/scratch/
+mas_medical_triage/core/model.pkl
+mas_medical_triage/core/model_meta.json
+# Keep config files, exclude potential data dumps if any
+# (None specifically identified yet, so we'll allow JSONs for now unless they are in scratch/)

@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Alice Martin",
+    "age": 72,
+    "gender": "F",
+    "symptoms": ["douleur thoracique", "difficulté respiratoire"],
+    "pain_level": 8,
+    "is_conscious": true
+  },
+  {
+    "name": "Karim Bensalem",
+    "age": 35,
+    "gender": "M",
+    "symptoms": ["mal de tête", "nausée"],
+    "pain_level": 3,
+    "is_conscious": true
+  },
+  {
+    "name": "Sophie Girard",
+    "age": 8,
+    "gender": "F",
+    "symptoms": ["fièvre élevée", "vomissements"],
+    "pain_level": 5,
+    "is_conscious": true
+  }
+]

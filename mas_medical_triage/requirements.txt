@@ -1,0 +1,22 @@
+spade>=4.0.0
+pydantic>=2.5.0
+python-dotenv>=1.0.0
+loguru>=0.7.2
+pytest>=8.0.0
+pytest-asyncio>=0.23.0
+faker>=24.0.0
+
+# Google Sheets
+gspread>=6.1.0
+google-auth>=2.25.0
+google-auth-oauthlib>=1.2.0
+
+# Flask API
+flask>=3.0.0
+flask-cors>=4.0.0
+flask-jwt-extended>=4.6.0
+bcrypt>=4.1.0
+
+# Production dependencies
+gunicorn>=21.2.0
+supervisor>=4.2.0
